@@ -7,8 +7,9 @@ using MultiCoreApp.Core.Models;
 
 namespace MultiCoreApp.Core.IntRepository
 {
-    public interface ICategoryRepository:IRepository<Category>
+    public interface ICustomerRepository : IRepository<Customer>
     {
-        Task<Category> GetCategoryWithProductsAsync(Guid categoryId);
+        //IEnumerable<Customer> GetCustomersByName(string name);
     }
+   
 }

@@ -7,8 +7,8 @@ using MultiCoreApp.Core.Models;
 
 namespace MultiCoreApp.Core.IntService
 {
-    public interface IProductService:IService<Product>
+    public interface ICustomerService:IService<Customer>
     {
-        Task<Product> GetProductsByCategory(Guid proId);
+        
     }
 }

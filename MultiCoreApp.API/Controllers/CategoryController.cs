@@ -4,11 +4,13 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MultiCoreApp.API.DTOs;
+using MultiCoreApp.API.Filters;
 using MultiCoreApp.Core.IntService;
 using MultiCoreApp.Core.Models;
 
 namespace MultiCoreApp.API.Controllers
 {
+    [ValidationFilter]
     [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
@@ -30,6 +32,7 @@ namespace MultiCoreApp.API.Controllers
             return Ok(_mapper.Map<IEnumerable<CategoryDto>>(cat));
         }
         [HttpGet("{id:guid}")]
+        [ServiceFilter(typeof(CategoryNotFoundFilter))]
         public async Task<IActionResult> GetById(Guid id)
         {
             var cat = await _catService.GetByIdAsync(id);

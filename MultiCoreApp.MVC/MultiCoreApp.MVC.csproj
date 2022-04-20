@@ -8,6 +8,14 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MultiCoreApp.Core\MultiCoreApp.Core.csproj" />
+    <ProjectReference Include="..\MultiCoreApp.DataAccessLayer\MultiCoreApp.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\MultiCoreApp.Service\MultiCoreApp.Service.csproj" />
   </ItemGroup>
 
 </Project>

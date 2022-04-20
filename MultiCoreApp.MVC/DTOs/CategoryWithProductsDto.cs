@@ -1,4 +1,4 @@
-﻿namespace MultiCoreApp.API.DTOs
+﻿namespace MultiCoreApp.MVC.DTOs
 {
     public class CategoryWithProductsDto:CategoryDto
     {

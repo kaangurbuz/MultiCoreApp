@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MultiCoreApp.API.Extensions;
+using MultiCoreApp.API.Filters;
 using MultiCoreApp.Core.IntRepository;
 using MultiCoreApp.Core.IntService;
 using MultiCoreApp.Core.IntUnitOfWork;
@@ -11,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddScoped<CategoryNotFoundFilter>();
 builder.Services.AddControllersWithViews()
     .AddNewtonsoftJson(options =>
         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
@@ -33,18 +37,23 @@ builder.Services.AddDbContext<MultiDbContext>(options =>
     });
 });
 builder.Services.AddControllers();
+builder.Services.AddControllers(o => o.Filters.Add(new ValidationFilter()));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+//Middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCustomExtension();
 
 app.UseHttpsRedirection();
 

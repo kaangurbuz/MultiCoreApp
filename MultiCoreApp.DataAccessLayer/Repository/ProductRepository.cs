@@ -22,5 +22,11 @@ namespace MultiCoreApp.DataAccessLayer.Repository
             return (await product)!;
 
         }
+
+        public async Task<IEnumerable<Product>> GetAllWithCategoryAsync()
+        {
+            var products = MultiDbContext.Products.Include(s => s.Category).ToListAsync();
+            return (await products);
+        }
     }
 }

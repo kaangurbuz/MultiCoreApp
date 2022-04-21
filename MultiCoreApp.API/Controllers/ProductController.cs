@@ -69,5 +69,11 @@ namespace MultiCoreApp.API.Controllers
             var pro = await _proService.GetProductsByCategory(id);
             return Ok(_mapper.Map<ProductWithCategoryDto>(pro));
         }
+        [HttpGet("categoryall")]
+        public async Task<IActionResult> GetAllWithCategory()
+        {
+            var pro = await _proService.GetAllWithCategoryAsync();
+            return Ok(_mapper.Map<IEnumerable<ProductWithCategoryDto>>(pro));
+        }
     }
 }

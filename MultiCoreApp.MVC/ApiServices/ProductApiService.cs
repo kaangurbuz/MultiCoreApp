@@ -12,13 +12,13 @@ namespace MultiCoreApp.MVC.ApiServices
             _httpClient = httpClient;
         }
 
-        public async Task<IEnumerable<ProductDto>> GetAllAsync()
+        public async Task<IEnumerable<ProductWithCategoryDto>> GetAllAsync()
         {
-            IEnumerable<ProductDto> productDtos;
+            IEnumerable<ProductWithCategoryDto> productDtos;
             var response = await _httpClient.GetAsync("product");
             if (response.IsSuccessStatusCode)
             {
-                productDtos = JsonConvert.DeserializeObject<IEnumerable<ProductDto>>(await response.Content.ReadAsStringAsync())!;
+                productDtos = JsonConvert.DeserializeObject<IEnumerable<ProductWithCategoryDto>>(await response.Content.ReadAsStringAsync())!;
             }
             else
             {
@@ -27,23 +27,23 @@ namespace MultiCoreApp.MVC.ApiServices
             return productDtos!;
         }
 
-        public async Task<ProductDto> GetByIdAsync(Guid id)
+        public async Task<ProductWithCategoryDto> GetByIdAsync(Guid id)
         {
             var response = await _httpClient.GetAsync($"product/{id}");
             if (response.IsSuccessStatusCode)
             {
-                return JsonConvert.DeserializeObject<ProductDto>(await response.Content.ReadAsStringAsync())!;
+                return JsonConvert.DeserializeObject<ProductWithCategoryDto>(await response.Content.ReadAsStringAsync())!;
             }
             return null!;
         }
 
-        public async Task<ProductDto> AddAsync(ProductDto proDto)
+        public async Task<ProductDto> AddAsync(ProductWithCategoryDto proDto)
         {
             var stringContent = new StringContent(JsonConvert.SerializeObject(proDto), System.Text.Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync("product", stringContent);
             if (response.IsSuccessStatusCode)
             {
-                proDto = JsonConvert.DeserializeObject<ProductDto>(await response.Content.ReadAsStringAsync())!;
+                proDto = JsonConvert.DeserializeObject<ProductWithCategoryDto>(await response.Content.ReadAsStringAsync())!;
             }
             else
             {
@@ -61,6 +61,36 @@ namespace MultiCoreApp.MVC.ApiServices
                 return true;
             }
             return false;
+        }
+
+        //public void Delete()
+        //{
+
+        //}
+
+        public async Task<IEnumerable<ProductWithCategoryDto>> GetAllAsyncWithCategory()
+        {
+            IEnumerable<ProductWithCategoryDto> productDtos;
+            var response = await _httpClient.GetAsync("product/categoryall");
+            if (response.IsSuccessStatusCode)
+            {
+                productDtos = JsonConvert.DeserializeObject<IEnumerable<ProductWithCategoryDto>>(await response.Content.ReadAsStringAsync())!;
+            }
+            else
+            {
+                productDtos = null!;
+            }
+            return productDtos!;
+        }
+
+        public async Task<ProductWithCategoryDto> GetByIdForDetailsAsync(Guid id)
+        {
+            var response = await _httpClient.GetAsync($"product/{id}/category");
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<ProductWithCategoryDto>(await response.Content.ReadAsStringAsync())!;
+            }
+            return null!;
         }
     }
 }

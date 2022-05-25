@@ -11,7 +11,7 @@ using MultiCoreApp.DataAccessLayer.UnitOfWork;
 using MultiCoreApp.Service.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 // Add services to the container.
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<CategoryNotFoundFilter>();
@@ -36,6 +36,17 @@ builder.Services.AddDbContext<MultiDbContext>(options =>
         sqlOptions.MigrationsAssembly("MultiCoreApp.DataAccessLayer");
     });
 });
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        builderr =>
+        {
+            builderr.WithOrigins("http://10.0.3.2/");
+            builderr.WithOrigins("http://localhost:3000");
+            
+        });
+});
 builder.Services.AddControllers();
 builder.Services.AddControllers(o => o.Filters.Add(new ValidationFilter()));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -56,7 +67,7 @@ if (app.Environment.IsDevelopment())
 app.UseCustomExtension();
 
 app.UseHttpsRedirection();
-
+app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthorization();
 
 app.MapControllers();

@@ -84,5 +84,7 @@ namespace MultiCoreApp.MVC.Controllers
         //{
         //    var proDto = await _productApiService.;
         //}
+
+
     }
 }

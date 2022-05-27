@@ -9,9 +9,10 @@ namespace MultiCoreApp.Core.IntUnitOfWork
 {
     public interface IUnitOfWork
     {
-        IProductRepository ProductRepository { get; }
-        ICategoryRepository CategoryRepository { get; }
-        
+        IProductRepository Product { get; }
+        ICategoryRepository Category { get; }
+        ICustomerRepository Customer { get; }
+
         Task CommitAsync();
         void Commit();
     }

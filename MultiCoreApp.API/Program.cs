@@ -1,7 +1,11 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MultiCoreApp.API.Extensions;
 using MultiCoreApp.API.Filters;
+using MultiCoreApp.API.Security;
 using MultiCoreApp.Core.IntRepository;
 using MultiCoreApp.Core.IntService;
 using MultiCoreApp.Core.IntUnitOfWork;
@@ -26,6 +30,7 @@ builder.Services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IUserService, UserService>();
 //builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
 //builder.Services.AddSingleton(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddDbContext<MultiDbContext>(options =>
@@ -47,6 +52,27 @@ builder.Services.AddCors(options =>
             
         });
 });
+
+builder.Services.AddAuthentication(opt =>
+{
+    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>
+{
+    var tokenOptions = builder.Configuration.GetSection("TokenOption").Get<CustomTokenOptions>();
+    opts.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidIssuer = tokenOptions.Issuer,
+        ValidAudience = tokenOptions.Audience,
+        IssuerSigningKey = SignHandler.GetSymetricSecurityKey(tokenOptions.SecretKey),
+
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+    };
+
+});
+
 builder.Services.AddControllers();
 builder.Services.AddControllers(o => o.Filters.Add(new ValidationFilter()));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -67,6 +93,7 @@ if (app.Environment.IsDevelopment())
 app.UseCustomExtension();
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthorization();
 

@@ -12,6 +12,7 @@ namespace MultiCoreApp.Core.IntUnitOfWork
         IProductRepository Product { get; }
         ICategoryRepository Category { get; }
         ICustomerRepository Customer { get; }
+        IUserRepository User { get; }
 
         Task CommitAsync();
         void Commit();

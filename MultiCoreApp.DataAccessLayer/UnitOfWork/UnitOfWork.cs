@@ -15,6 +15,7 @@ namespace MultiCoreApp.DataAccessLayer.UnitOfWork
         private ProductRepository _productRepository;
         private CategoryRepository _categoryRepository;
         private CustomerRepository _customerRepository;
+        private UserRepository _userRepository;
         public UnitOfWork(MultiDbContext db)
         {
             _db = db;
@@ -22,6 +23,7 @@ namespace MultiCoreApp.DataAccessLayer.UnitOfWork
         public IProductRepository Product => _productRepository ??= new ProductRepository(_db);
         public ICategoryRepository Category => _categoryRepository ??= new CategoryRepository(_db);
         public ICustomerRepository Customer => _customerRepository ??= new CustomerRepository(_db);
+        public IUserRepository User => _userRepository ??= new UserRepository(_db);
 
         public async Task CommitAsync()
         {

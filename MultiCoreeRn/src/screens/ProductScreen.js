@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import {DataTable} from 'react-native-paper';
 
@@ -18,7 +19,9 @@ export default class ProductScreen extends Component {
     };
   }
   componentDidMount() {
-    return fetch('https://jsonplaceholder.typicode.com/albums')
+    return fetch(
+      'https://multicoreapp-api.conveyor.cloud/api/Product/categoryall',
+    )
       .then(response => response.json())
       .then(responseJson => {
         this.setState({isLoading: false, dataSource: responseJson});
@@ -37,16 +40,25 @@ export default class ProductScreen extends Component {
         <ScrollView style={styles.container}>
           <DataTable>
             <DataTable.Header>
-              <DataTable.Title>Id</DataTable.Title>
+              <DataTable.Title style={{display: 'none'}}>Id</DataTable.Title>
               <DataTable.Title>Product Name</DataTable.Title>
+              <DataTable.Title>Stock</DataTable.Title>
+              <DataTable.Title>Price</DataTable.Title>
+              <DataTable.Title>Category Name</DataTable.Title>
             </DataTable.Header>
 
             {this.state.dataSource.map((item, key) => (
-              <DataTable.Row key={key}>
-                <DataTable.Cell>{item.id}</DataTable.Cell>
-                <DataTable.Cell>{item.title}</DataTable.Cell>
-                <DataTable.Cell>{item.body}</DataTable.Cell>
-              </DataTable.Row>
+              <TouchableOpacity key={key}>
+                <DataTable.Row>
+                  <DataTable.Cell style={{display: 'none'}}>
+                    {item.id}
+                  </DataTable.Cell>
+                  <DataTable.Cell>{item.name}</DataTable.Cell>
+                  <DataTable.Cell>{item.stock}</DataTable.Cell>
+                  <DataTable.Cell>{item.price}</DataTable.Cell>
+                  <DataTable.Cell>{item.category.name}</DataTable.Cell>
+                </DataTable.Row>
+              </TouchableOpacity>
             ))}
           </DataTable>
         </ScrollView>
